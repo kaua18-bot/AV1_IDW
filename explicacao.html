@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Explicação do script.js — Lista de Tarefas</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;line-height:1.5;margin:20px}
+    pre{background:#f4f4f4;padding:12px;border-radius:6px;overflow:auto}
+    h1,h2{color:#333}
+    .linha{margin-bottom:10px}
+    .codigo{font-family:Monaco,Menlo,monospace;background:#fff;padding:8px;border:1px solid #ddd}
+  </style>
+</head>
+<body>
+  <h1>Explicação linha a linha — <code>js/script.js</code></h1>
+  <p>Abra este arquivo no navegador e use <strong>Imprimir → Salvar como PDF</strong> para gerar o PDF solicitado pelo professor.</p>
+
+  <h2>Conteúdo do arquivo</h2>
+  <pre class="codigo">// Array que armazena as tarefas
+const tarefas = [];
+
+// Seletores do DOM
+const form = document.querySelector("#form-tarefas");
+const input = document.querySelector("#input-tarefa");
+const lista = document.querySelector("#lista-tarefas");
+const mensagemErro = document.querySelector("#mensagem-erro");
+
+// Evento de envio do formulário
+form.addEventListener("submit", function(event) {
+    event.preventDefault(); // impede a página de recarregar
+
+    const texto = input.value;
+
+    if (!validarTarefa(texto)) {
+        return; // não adiciona se inválido
+    }
+
+    tarefas.push(texto.trim()); // adiciona a tarefa ao array
+    input.value = ""; // limpa o campo
+
+    renderTarefas(); // atualiza a lista na tela
+});
+
+// Função de validação: impede tarefa vazia
+function validarTarefa(texto) {
+    if (texto.trim() === "") {
+        mensagemErro.textContent = "Digite uma tarefa válida!";
+        return false;
+    }
+
+    mensagemErro.textContent = ""; // limpa mensagem de erro
+    return true;
+}
+
+// Função que atualiza a lista na tela
+function renderTarefas() {
+    lista.innerHTML = ""; // limpa lista antes de renderizar
+
+    tarefas.forEach(function (tarefa) {
+        const li = document.createElement("li");
+        li.textContent = tarefa;
+        lista.appendChild(li);
+    });
+}
+  </pre>
+
+  <h2>Explicação linha a linha</h2>
+  <div class="linha"><strong>// Array que armazena as tarefas</strong><br>Comentário explicativo: indica que a próxima linha define a estrutura de dados que guardará as tarefas.</div>
+  <div class="linha"><strong>const tarefas = [];</strong><br>Cria uma constante chamada <code>tarefas</code> que inicia como um array vazio. As tarefas adicionadas serão armazenadas aqui.</div>
+
+  <div class="linha"><strong>// Seletores do DOM</strong><br>Comentário: a seguir selecionamos elementos do HTML para interagir com eles pelo JavaScript.</div>
+  <div class="linha"><strong>const form = document.querySelector("#form-tarefas");</strong><br>Seleciona o elemento <code>&lt;form id="form-tarefas"&gt;</code> do HTML e guarda na variável <code>form</code>.</div>
+  <div class="linha"><strong>const input = document.querySelector("#input-tarefa");</strong><br>Seleciona o campo de texto onde o usuário digita a tarefa.</div>
+  <div class="linha"><strong>const lista = document.querySelector("#lista-tarefas");</strong><br>Seleciona o elemento <code>&lt;ul id="lista-tarefas"&gt;</code> que receberá as tarefas renderizadas.</div>
+  <div class="linha"><strong>const mensagemErro = document.querySelector("#mensagem-erro");</strong><br>Seleciona o elemento que exibirá mensagens de erro (quando o usuário enviar um texto vazio).</div>
+
+  <div class="linha"><strong>// Evento de envio do formulário</strong><br>Comentário: aqui definimos o que acontece quando o formulário é enviado (usuário clica em "Adicionar" ou aperta Enter).</div>
+  <div class="linha"><strong>form.addEventListener("submit", function(event) {</strong><br>Adiciona um listener para o evento <code>submit</code>. A função recebe o objeto <code>event</code>.</div>
+  <div class="linha"><strong>event.preventDefault();</strong><br>Impede o comportamento padrão do formulário (recarregar a página), permitindo manipular o envio com JS.</div>
+  <div class="linha"><strong>const texto = input.value;</strong><br>Captura o valor atual do campo de texto e guarda na variável <code>texto</code>.</div>
+  <div class="linha"><strong>if (!validarTarefa(texto)) { return; }</strong><br>Chama a função de validação: se o texto for inválido (vazio após trim), a função retorna <code>false</code> e o código para aqui (não adiciona a tarefa).</div>
+  <div class="linha"><strong>tarefas.push(texto.trim());</strong><br>Adiciona o texto (removendo espaços extras no início/fim) ao array <code>tarefas</code>.</div>
+  <div class="linha"><strong>input.value = "";</strong><br>Limpa o campo de entrada para que o usuário possa digitar outra tarefa facilmente.</div>
+  <div class="linha"><strong>renderTarefas();</strong><br>Chama a função que atualiza a lista na tela de acordo com o conteúdo atual do array <code>tarefas</code>.</div>
+
+  <div class="linha"><strong>// Função de validação: impede tarefa vazia</strong><br>Comentário: valida o texto antes de permitir a adição.</div>
+  <div class="linha"><strong>function validarTarefa(texto) {</strong><br>Declaração da função que recebe o texto digitado como parâmetro.</div>
+  <div class="linha"><strong>if (texto.trim() === "") { mensagemErro.textContent = "Digite uma tarefa válida!"; return false; }</strong><br>Se, após remover espaços, o texto estiver vazio, atualiza o elemento de erro com uma mensagem e retorna <code>false</code>.</div>
+  <div class="linha"><strong>mensagemErro.textContent = "";</strong><br>Se a validação passar, limpa a mensagem de erro (caso existisse) e retorna <code>true</code>.</div>
+
+  <div class="linha"><strong>// Função que atualiza a lista na tela</strong><br>Comentário: re-renderiza a lista com base no array.</div>
+  <div class="linha"><strong>function renderTarefas() { lista.innerHTML = ""; ... }</strong><br>Limpa o conteúdo atual da lista e percorre o array <code>tarefas</code>, criando um elemento <code>li</code> para cada item e anexando-o ao <code>ul</code>.</div>
+
+  <h2>Como gerar o PDF</h2>
+  <ol>
+    <li>Abra o arquivo <code>explicacao.html</code> no seu navegador (duplo clique ou arrastar para a janela do browser).</li>
+    <li>No navegador, escolha <strong>Imprimir</strong> (Ctrl+P) e selecione <strong>Salvar como PDF</strong> ou similar.</li>
+    <li>Salve o PDF com o nome que desejar e envie no Google Classroom.</li>
+  </ol>
+
+  <h2>Arquivos importantes neste projeto</h2>
+  <ul>
+    <li><code>index.html</code> — estrutura da página e referências a CSS/JS.</li>
+    <li><code>css/style.css</code> — arquivo de estilo (vazio por enquanto, você pode personalizar).</li>
+    <li><code>js/script.js</code> — código JavaScript com Create + Read e validação.</li>
+  </ul>
+
+  <p>Se quiser, posso também:</p>
+  <ul>
+    <li>Converter essa explicação em um PDF e adicioná-lo ao repositório (posso gerar um HTML pronto para impressão e instruções; a conversão final é feita localmente).</li>
+    <li>Adicionar persistência com <code>localStorage</code> (para guardar tarefas entre recarregamentos).</li>
+    <li>Adicionar botão de excluir tarefa (opção CRUD futura).</li>
+  </ul>
+</body>
+</html>
