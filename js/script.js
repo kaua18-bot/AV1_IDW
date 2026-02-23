@@ -26,11 +26,11 @@ form.addEventListener("submit", function(event) {
 // Função de validação: impede tarefa vazia
 function validarTarefa(texto) {
     if (texto.trim() === "") {
-        mensagemErro.textContent = "Digite uma tarefa válida!";
+        setError("Digite uma tarefa válida!");
         return false;
     }
 
-    mensagemErro.textContent = ""; // limpa mensagem de erro
+    clearError(); // limpa mensagem de erro
     return true;
 }
 
@@ -43,4 +43,21 @@ function renderTarefas() {
         li.textContent = tarefa;
         lista.appendChild(li);
     });
+}
+
+// Mostra mensagem de erro e aplica estilos/atributos de acessibilidade
+function setError(msg) {
+    mensagemErro.textContent = msg;
+    mensagemErro.classList.add('mensagem-erro');
+    input.classList.add('input-error');
+    input.setAttribute('aria-invalid', 'true');
+    input.focus();
+}
+
+// Limpa erro
+function clearError() {
+    mensagemErro.textContent = '';
+    mensagemErro.classList.remove('mensagem-erro');
+    input.classList.remove('input-error');
+    input.removeAttribute('aria-invalid');
 }
