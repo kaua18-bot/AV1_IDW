@@ -4,44 +4,478 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minha Lista de Tarefas</title>
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="style.css">
-
-    <!-- Fontes -->
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Barlow', sans-serif;
+            background-image: url('https://th.bing.com/th/id/R.f8d280ac72536006395b1b92203bf999?rik=Vx58HaP%2fFDIhQA&pid=ImgRaw&r=0');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0,60,20,0.72) 0%, rgba(0,0,0,0.55) 100%);
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 460px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #00a651;
+            color: #fff;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 13px;
+            letter-spacing: 2px;
+            padding: 4px 14px;
+            border-radius: 2px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 16px;
+            padding: 2rem 2rem 1.75rem;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.45);
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 36px;
+            color: #fff;
+            letter-spacing: 2px;
+            line-height: 1;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 span {
+            color: #00e676;
+        }
+
+        .form-group {
+            margin-bottom: 6px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 6px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 15px;
+            color: #fff;
+            outline: none;
+            transition: border 0.2s, background 0.2s;
+            font-family: 'Barlow', sans-serif;
+        }
+
+        input[type="text"]::placeholder { color: rgba(255,255,255,0.35); }
+
+        input[type="text"]:focus {
+            border-color: #00e676;
+            background: rgba(255,255,255,0.15);
+        }
+
+        input.input-error {
+            border-color: #ff5252;
+            background: rgba(255,82,82,0.1);
+        }
+
+        .btn-add {
+            background: #00a651;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 16px;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            white-space: nowrap;
+        }
+
+        .btn-add:hover { background: #00c962; }
+        .btn-add:active { transform: scale(0.97); }
+
+        #mensagem-erro {
+            font-size: 12px;
+            color: #ff5252;
+            min-height: 18px;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin: 1.25rem 0 1rem;
+        }
+
+        .tarefas-lista {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .tarefa-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 10px 14px;
+            animation: fadeIn 0.25s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .tarefa-item span {
+            font-size: 15px;
+            color: #fff;
+            flex: 1;
+        }
+
+        .btn-excluir {
+            background: none;
+            border: 1px solid rgba(255,82,82,0.5);
+            color: #ff5252;
+            border-radius: 6px;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-family: 'Barlow', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            margin-left: 12px;
+            transition: background 0.2s, color 0.2s;
+            text-transform: uppercase;
+        }
+
+        .btn-excluir:hover {
+            background: #ff5252;
+            color: #fff;
+        }
+
+        .btn-editar {
+            background: none;
+            border: 1px solid rgba(0,230,118,0.5);
+            color: #00e676;
+            border-radius: 6px;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-family: 'Barlow', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            margin-left: 8px;
+            transition: background 0.2s, color 0.2s;
+            text-transform: uppercase;
+        }
+
+        .btn-editar:hover {
+            background: #00e676;
+            color: #000;
+        }
+
+        .tarefa-item.editando {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 8px;
+            border-color: rgba(0,230,118,0.4);
+            background: rgba(0,230,118,0.05);
+        }
+
+        .edit-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .edit-input {
+            flex: 1;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid #00e676;
+            border-radius: 6px;
+            padding: 7px 12px;
+            font-size: 14px;
+            color: #fff;
+            outline: none;
+            font-family: 'Barlow', sans-serif;
+        }
+
+        .btn-salvar {
+            background: #00a651;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 7px 14px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 14px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-salvar:hover { background: #00c962; }
+
+        .btn-cancelar {
+            background: none;
+            border: 1px solid rgba(255,255,255,0.25);
+            color: rgba(255,255,255,0.6);
+            border-radius: 6px;
+            padding: 7px 14px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 14px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-cancelar:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        .acoes {
+            display: flex;
+            gap: 0;
+        }
+
+        .lista-vazia {
+            font-size: 14px;
+            color: rgba(255,255,255,0.4);
+            font-style: italic;
+            text-align: center;
+            padding: 12px 0;
+        }
+
+        .contador {
+            font-size: 12px;
+            color: rgba(255,255,255,0.45);
+            text-align: right;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .contador span {
+            color: #00e676;
+            font-weight: 600;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <div class="badge">⚽ Avanti Palestra</div>
+        <div class="card">
+            <h1>Minha Lista de <span>Tarefas</span></h1>
 
-<div class="container">
-    <div class="badge">⚽ Avanti Palestra</div>
-
-    <div class="card">
-        <h1>Minha Lista de <span>Tarefas</span></h1>
-
-        <form id="form-tarefas">
-            <div class="form-group">
-                <label>Nova tarefa</label>
-                <div class="input-row">
-                    <input type="text" id="input-tarefa" placeholder="Digite sua tarefa..." />
-                    <button type="submit" class="btn-add">Adicionar</button>
+            <form id="form-tarefas" novalidate>
+                <div class="form-group">
+                    <label for="input-tarefa">Nova tarefa</label>
+                    <div class="input-row">
+                        <input type="text" id="input-tarefa" placeholder="Digite sua tarefa..." aria-describedby="mensagem-erro" />
+                        <button type="submit" class="btn-add">Adicionar</button>
+                    </div>
                 </div>
-            </div>
-            <p id="mensagem-erro"></p>
-        </form>
+                <p id="mensagem-erro" role="alert" aria-live="polite"></p>
+            </form>
 
-        <hr class="divider">
+            <hr class="divider">
 
-        <ul id="lista-tarefas"></ul>
+            <ul id="lista-tarefas" class="tarefas-lista"></ul>
 
-        <p class="contador" id="contador">
-            <span id="num-tarefas">0</span> tarefa(s)
-        </p>
+            <p class="contador" id="contador" style="display:none;">
+                <span id="num-tarefas">0</span> tarefa(s) na lista
+            </p>
+        </div>
     </div>
-</div>
 
-<!-- JS -->
-<script src="script.js"></script>
+    <script>
+        const tarefas = [];
+        const form = document.querySelector("#form-tarefas");
+        const input = document.querySelector("#input-tarefa");
+        const lista = document.querySelector("#lista-tarefas");
+        const mensagemErro = document.querySelector("#mensagem-erro");
+        const contador = document.querySelector("#contador");
+        const numTarefas = document.querySelector("#num-tarefas");
 
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+            const texto = input.value;
+            if (!validarTarefa(texto)) return;
+            tarefas.push(texto.trim());
+            input.value = "";
+            renderTarefas();
+        });
+
+        function validarTarefa(texto) {
+            if (texto.trim() === "") {
+                setError("Digite uma tarefa válida!");
+                return false;
+            }
+            clearError();
+            return true;
+        }
+
+        function renderTarefas() {
+            lista.innerHTML = "";
+
+            if (tarefas.length === 0) {
+                const li = document.createElement("li");
+                li.textContent = "Nenhuma tarefa adicionada.";
+                li.classList.add("lista-vazia");
+                lista.appendChild(li);
+                contador.style.display = "none";
+                return;
+            }
+
+            tarefas.forEach(function(tarefa, index) {
+                const li = document.createElement("li");
+                li.classList.add("tarefa-item");
+
+                const viewRow = document.createElement("div");
+                viewRow.style.cssText = "display:flex; align-items:center; justify-content:space-between; width:100%;";
+
+                const span = document.createElement("span");
+                span.textContent = tarefa;
+
+                const acoes = document.createElement("div");
+                acoes.classList.add("acoes");
+
+                const btnEditar = document.createElement("button");
+                btnEditar.textContent = "Editar";
+                btnEditar.classList.add("btn-editar");
+
+                const btnExcluir = document.createElement("button");
+                btnExcluir.textContent = "Excluir";
+                btnExcluir.classList.add("btn-excluir");
+
+                const editRow = document.createElement("div");
+                editRow.classList.add("edit-row");
+                editRow.style.display = "none";
+
+                const editInput = document.createElement("input");
+                editInput.type = "text";
+                editInput.classList.add("edit-input");
+                editInput.value = tarefa;
+
+                const btnSalvar = document.createElement("button");
+                btnSalvar.textContent = "Salvar";
+                btnSalvar.classList.add("btn-salvar");
+
+                const btnCancelar = document.createElement("button");
+                btnCancelar.textContent = "Cancelar";
+                btnCancelar.classList.add("btn-cancelar");
+
+                btnEditar.addEventListener("click", function() {
+                    li.classList.add("editando");
+                    viewRow.style.display = "none";
+                    editRow.style.display = "flex";
+                    editInput.focus();
+                    editInput.select();
+                });
+
+                btnCancelar.addEventListener("click", function() {
+                    li.classList.remove("editando");
+                    viewRow.style.display = "flex";
+                    editRow.style.display = "none";
+                    editInput.value = tarefas[index];
+                });
+
+                btnSalvar.addEventListener("click", function() {
+                    const novoTexto = editInput.value.trim();
+                    if (novoTexto === "") {
+                        editInput.style.borderColor = "#ff5252";
+                        editInput.focus();
+                        return;
+                    }
+                    tarefas[index] = novoTexto;
+                    renderTarefas();
+                });
+
+                editInput.addEventListener("keydown", function(e) {
+                    if (e.key === "Enter") btnSalvar.click();
+                    if (e.key === "Escape") btnCancelar.click();
+                });
+
+                btnExcluir.addEventListener("click", function() {
+                    tarefas.splice(index, 1);
+                    renderTarefas();
+                });
+
+                acoes.appendChild(btnEditar);
+                acoes.appendChild(btnExcluir);
+                viewRow.appendChild(span);
+                viewRow.appendChild(acoes);
+                editRow.appendChild(editInput);
+                editRow.appendChild(btnSalvar);
+                editRow.appendChild(btnCancelar);
+                li.appendChild(viewRow);
+                li.appendChild(editRow);
+                lista.appendChild(li);
+            });
+
+            numTarefas.textContent = tarefas.length;
+            contador.style.display = "block";
+        }
+
+        function setError(msg) {
+            mensagemErro.textContent = msg;
+            input.classList.add("input-error");
+            input.setAttribute("aria-invalid", "true");
+            input.focus();
+        }
+
+        function clearError() {
+            mensagemErro.textContent = "";
+            input.classList.remove("input-error");
+            input.removeAttribute("aria-invalid");
+        }
+
+        renderTarefas();
+    </script>
 </body>
 </html>
