@@ -4,32 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minha Lista de Tarefas</title>
-    <link rel="stylesheet" href="css/style.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Fontes -->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="container">
-        <div class="card">
-            <h1>Minha Lista de Tarefas</h1>
+<div class="container">
+    <div class="badge">⚽ Avanti Palestra</div>
 
-            <form id="form-tarefas" novalidate>
-                <div class="form-group">
-                    <label for="input-tarefa">Tarefa</label>
-                    <input type="text" id="input-tarefa" placeholder="Digite sua tarefa" aria-describedby="mensagem-erro" />
+    <div class="card">
+        <h1>Minha Lista de <span>Tarefas</span></h1>
+
+        <form id="form-tarefas">
+            <div class="form-group">
+                <label>Nova tarefa</label>
+                <div class="input-row">
+                    <input type="text" id="input-tarefa" placeholder="Digite sua tarefa..." />
+                    <button type="submit" class="btn-add">Adicionar</button>
                 </div>
+            </div>
+            <p id="mensagem-erro"></p>
+        </form>
 
-                <div class="actions">
-                    <button type="submit" class="btn">Adicionar</button>
-                </div>
-            </form>
+        <hr class="divider">
 
-            <p id="mensagem-erro" class="mensagem mensagem-erro" role="alert" aria-live="polite"></p>
+        <ul id="lista-tarefas"></ul>
 
-            <ul id="lista-tarefas" class="tarefas-lista"></ul>
-        </div>
+        <p class="contador" id="contador">
+            <span id="num-tarefas">0</span> tarefa(s)
+        </p>
     </div>
+</div>
 
-    <script src="js/script.js"></script>
+<!-- JS -->
+<script src="script.js"></script>
 
 </body>
 </html>
