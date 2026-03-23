@@ -1,4 +1,4 @@
-const tarefas = JSON.parse(localStorage.getItem('tarefas')) || [];
+const tarefas = JSON.parse(localStorage.getItem('tarefas') || '[]');
 
 const form = document.querySelector("#form-tarefas");
 const input = document.querySelector("#input-tarefa");
