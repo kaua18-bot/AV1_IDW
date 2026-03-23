@@ -1,52 +1,299 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
 body {
-    font-family: 'Barlow', sans-serif;
-    background: url('https://th.bing.com/th/id/R.f8d280ac72536006395b1b92203bf999?rik=Vx58HaP%2fFDIhQA&pid=ImgRaw&r=0') no-repeat center/cover;
     min-height: 100vh;
+    font-family: 'Barlow', sans-serif;
+    background-image: url('https://th.bing.com/th/id/R.f8d280ac72536006395b1b92203bf999?rik=Vx58HaP%2fFDIhQA&pid=ImgRaw&r=0');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
 }
-
+ 
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,60,20,0.72) 0%, rgba(0,0,0,0.55) 100%);
+    z-index: 0;
+}
+ 
 .container {
+    position: relative;
+    z-index: 1;
     width: 100%;
-    max-width: 400px;
+    max-width: 460px;
 }
-
-.card {
-    background: rgba(255,255,255,0.1);
-    padding: 20px;
-    border-radius: 15px;
-    backdrop-filter: blur(10px);
-}
-
-h1 {
+ 
+.badge {
+    display: inline-block;
+    background: #00a651;
     color: #fff;
-    margin-bottom: 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
 }
-
+ 
+.card {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 16px;
+    padding: 2rem 2rem 1.75rem;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.45);
+}
+ 
+h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: #fff;
+    letter-spacing: 2px;
+    line-height: 1;
+    margin-bottom: 1.5rem;
+}
+ 
+h1 span {
+    color: #00e676;
+}
+ 
+.form-group {
+    margin-bottom: 6px;
+}
+ 
+label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 6px;
+}
+ 
 .input-row {
     display: flex;
-    gap: 10px;
+    gap: 8px;
 }
-
-input {
+ 
+input[type="text"] {
     flex: 1;
-    padding: 10px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 15px;
+    color: #fff;
+    outline: none;
+    transition: border 0.2s, background 0.2s;
+    font-family: 'Barlow', sans-serif;
 }
-
-button {
+ 
+input[type="text"]::placeholder { color: rgba(255,255,255,0.35); }
+ 
+input[type="text"]:focus {
+    border-color: #00e676;
+    background: rgba(255,255,255,0.15);
+}
+ 
+input.input-error {
+    border-color: #ff5252;
+    background: rgba(255,82,82,0.1);
+}
+ 
+.btn-add {
+    background: #00a651;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 1.5px;
     cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    white-space: nowrap;
 }
-
+ 
+.btn-add:hover { background: #00c962; }
+.btn-add:active { transform: scale(0.97); }
+ 
+#mensagem-erro {
+    font-size: 12px;
+    color: #ff5252;
+    min-height: 18px;
+    margin-top: 5px;
+    font-weight: 500;
+}
+ 
+.divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    margin: 1.25rem 0 1rem;
+}
+ 
+.tarefas-lista {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+ 
 .tarefa-item {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    margin-top: 10px;
-    color: white;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 10px 14px;
+    animation: fadeIn 0.25s ease;
 }
+ 
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+ 
+.tarefa-item span {
+    font-size: 15px;
+    color: #fff;
+    flex: 1;
+}
+ 
+.acoes {
+    display: flex;
+    gap: 0;
+}
+ 
+.btn-editar {
+    background: none;
+    border: 1px solid rgba(0,230,118,0.5);
+    color: #00e676;
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    margin-left: 8px;
+    transition: background 0.2s, color 0.2s;
+    text-transform: uppercase;
+}
+ 
+.btn-editar:hover {
+    background: #00e676;
+    color: #000;
+}
+ 
+.btn-excluir {
+    background: none;
+    border: 1px solid rgba(255,82,82,0.5);
+    color: #ff5252;
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    margin-left: 8px;
+    transition: background 0.2s, color 0.2s;
+    text-transform: uppercase;
+}
+ 
+.btn-excluir:hover {
+    background: #ff5252;
+    color: #fff;
+}
+ 
+.tarefa-item.editando {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    border-color: rgba(0,230,118,0.4);
+    background: rgba(0,230,118,0.05);
+}
+ 
+.edit-row {
+    display: flex;
+    gap: 8px;
+}
+ 
+.edit-input {
+    flex: 1;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid #00e676;
+    border-radius: 6px;
+    padding: 7px 12px;
+    font-size: 14px;
+    color: #fff;
+    outline: none;
+    font-family: 'Barlow', sans-serif;
+}
+ 
+.btn-salvar {
+    background: #00a651;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+ 
+.btn-salvar:hover { background: #00c962; }
+ 
+.btn-cancelar {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.6);
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+}
+ 
+.btn-cancelar:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+ 
+.lista-vazia {
+    font-size: 14px;
+    color: rgba(255,255,255,0.4);
+    font-style: italic;
+    text-align: center;
+    padding: 12px 0;
+}
+ 
+.contador {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+    text-align: right;
+    margin-top: 10px;
+    letter-spacing: 0.5px;
+}
+ 
+.contador span {
+    color: #00e676;
+    font-weight: 600;
+}
+ 
